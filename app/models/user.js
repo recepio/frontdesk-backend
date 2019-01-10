@@ -3,45 +3,42 @@ const bcrypt 			= require('bcrypt');
 const bcrypt_p 			= require('bcrypt-promise');
 const jwt           	= require('jsonwebtoken');
 const {TE, to} = require('../utils/await-async-sequelize');
+const config = require('../config/config');
 
 module.exports = (sequelize, DataTypes) => {
       const User = sequelize.define('User', {
         email     : {type: DataTypes.STRING, allowNull: true, unique: true, validate: { isEmail: {msg: "invalid email address"} }},
         password  : DataTypes.STRING,
-      }, {
-          classMethods: {
-              associate: function(models) {
-                  User.hasOne(models.Profile, {
-                      foreignKey: 'userId',
-                      as: 'profile',
-                  });
-              },
-              comparePassword:  async function (pw) {
-                  let err, pass
-                  if(!this.password) TE('password not set');
+      }, {});
 
-                  [err, pass] = await to(bcrypt_p.compare(pw, this.password));
-                  if(err) TE(err);
+    User.associate = function(models) {
+        User.hasOne(models.Profile, {
+            foreignKey: 'userId',
+            as: 'profile',
+        });
+    };
+    User.prototype.comparePassword = async function (pw) {
+        let err, pass
+        if(!this.password) TE('password not set');
 
-                  if(!pass) TE('invalid password');
+        [err, pass] = await to(bcrypt_p.compare(pw, this.password));
+        if(err) TE(err);
 
-                  return this;
-              },
-              getJWT: function () {
-                  let expiration_time = parseInt(CONFIG.jwt_expiration);
-                  return "Bearer "+jwt.sign({user_id:this.id}, CONFIG.jwt_encryption, {expiresIn: expiration_time});
-              },
-              toWeb: function () {
-                  let json = this.toJSON();
-                  delete json['password'];
-                  return json;
-              }
-          }
-      });
+        if(!pass) TE('invalid password');
 
+        return this;
+    };
+    User.prototype.getJWT = function () {
+        let expiration_time = parseInt(config.jwt_expiration);
+        return jwt.sign({user_id:this.id}, config.jwt_encryption, {expiresIn: expiration_time});
+    };
+    User.prototype.toWeb = function () {
+        let json = this.toJSON();
+        delete json['password'];
+        return json;
+    };
 
-
-      User.beforeSave(async (user, options) => {
+    User.beforeSave(async (user, options) => {
           let err;
           if (user.changed('password')){
               let salt, hash

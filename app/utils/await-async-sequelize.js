@@ -10,6 +10,7 @@ module.exports.to = async (promise) => {
 };
 
 module.exports.ReE = function(res, err, code){
+    console.log(code);
     if(typeof err == 'object' && typeof err.message != 'undefined'){
         err = err.message;
     }
@@ -35,6 +36,5 @@ module.exports.TE = TE = function(err_message, log){ // TE stands for Throw Erro
     if(log === true){
         console.error(err_message);
     }
-
     throw new Error(err_message);
 };

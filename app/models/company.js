@@ -6,10 +6,14 @@ module.exports = (sequelize, DataTypes) => {
       location  : DataTypes.STRING
   }, {});
     Company.associate = function(models) {
-        Company.hasMany(models.CompanyMember, {
+        Company.Users = Company.hasMany(models.CompanyMember, {
             foreignKey: 'companyId',
-            as: 'descriptions',
+            as: 'users',
         });
+    };
+    Company.prototype.toWeb = function () {
+        let json = this.toJSON();
+        return json;
     };
   return Company;
 };

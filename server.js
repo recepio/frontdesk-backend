@@ -7,6 +7,7 @@ const cors          = require('cors');
 const CONFIG = require('./app/config/config');
 const app = express();
 const users    = require('./app/routes/users');
+const workspace = require('./app/routes/workspaces');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,7 +26,8 @@ if(CONFIG.app==='development'){
 }
 app.use(cors());
 
-app.use('/v1', users);
+app.use('/v1/auth', users);
+app.use('/v1/workspace', workspace);
 
 app.get('*', (req, res) => res.status(200).send({
     message: 'frontdesk backend',
