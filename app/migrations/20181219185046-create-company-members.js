@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: 'uniqueTag',
       },
       password: {
         type: Sequelize.STRING
@@ -17,8 +18,9 @@ module.exports = {
       position: {
         type: Sequelize.STRING
       },
-      companyId: {
-        type: Sequelize.INTEGER
+      companyUuid: {
+        type: Sequelize.UUID,
+        unique: 'uniqueTag'
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +30,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    },
+     {
+       indexes: [
+          {
+           unique: true,
+           fields: ['email', 'companyUUid']
+          }
+         ]
     });
   },
   down: (queryInterface, Sequelize) => {

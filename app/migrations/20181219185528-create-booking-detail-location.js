@@ -13,16 +13,20 @@ module.exports = {
       },
       serviceBookingDetailsId: {
         type: Sequelize.INTEGER,
-          references: {
-              model: 'booking_details',
-              key: 'id'
-          }
+        references: {
+            model: 'BookingDetails',
+            key: 'id'
+        }
       },
       description: {
         type: Sequelize.TEXT
       },
       resourceId: {
-        type: Sequelize.UUID
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'Resource',
+            key: 'id'
+        }
       },
       latitude : {
         type: Sequelize.STRING

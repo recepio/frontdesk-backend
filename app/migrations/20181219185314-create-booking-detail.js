@@ -12,10 +12,10 @@ module.exports = {
           type: Sequelize.STRING
       },
       serviceSummaryId  : {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           references: {
-              model: 'booking_summaries',
-              key: 'uuid'
+              model: 'BookingSummaries',
+              key: 'id'
           }
       },
       dateOfUse : {

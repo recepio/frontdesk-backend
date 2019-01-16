@@ -1,14 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const CompanyMember = sequelize.define('CompanyMember', {
-      email     : {type: DataTypes.STRING, allowNull: true, validate: { isEmail: {msg: "invalid email address"} }},
+      email     : {type: DataTypes.STRING, allowNull: true, unique: 'uniqueTag', validate: { isEmail: {msg: "invalid email address"} }},
       password  : DataTypes.STRING,
       position  : DataTypes.STRING,
-      companyId : DataTypes.INTEGER
+      companyUuid : {type: DataTypes.UUID, unique: 'uniqueTag'}
   }, {});
     CompanyMember.associate = function(models) {
         CompanyMember.company = CompanyMember.belongsTo(models.Company, {
-            foreignKey: 'companyId',
+            foreignKey: 'companyUuid',
             as: 'company'
         });
   };

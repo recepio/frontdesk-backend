@@ -2,16 +2,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('booking_summaries', {
-      uuid  :  {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV1,
-        primaryKey: true
-      },
+       id: {
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            type: Sequelize.INTEGER
+       },
       companyName : {
         type: Sequelize.STRING
       },
-      companyId : {
-        type: Sequelize.INTEGER
+      companyUuid : {
+        type: Sequelize.UUID,
+          references: {
+              model: 'Company',
+              key: 'uuid'
+          }
       },
       createdAt: {
         allowNull: false,

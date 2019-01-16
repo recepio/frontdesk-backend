@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       ratingPercentage: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       resourceId: {
-          type: DataTypes.UUID,
+          type: DataTypes.INTEGER,
       }
   }, {});
     CustomerReview.associate = function(models) {

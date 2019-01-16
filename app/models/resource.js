@@ -1,13 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Resource = sequelize.define('Resource', {
-      uuid: {
-          allowNull: false,
-          type: DataTypes.UUID,
-          defaultValue: DataTypes.UUIDV1,
-          primaryKey: true
-      },
-      areaUuid: DataTypes.UUID,
+      areaId: DataTypes.INTEGER,
       description: DataTypes.TEXT,
       name: DataTypes.STRING,
       resourceInstances: DataTypes.INTEGER,
@@ -16,9 +10,13 @@ module.exports = (sequelize, DataTypes) => {
       pricingPerIndex: DataTypes.DECIMAL
   }, {});
     Resource.associate = function(models) {
-        Resource.hasMany(models.ResourceDescription, {
+        Resource.Descriptions = Resource.hasMany(models.ResourceDescription, {
             foreignKey: 'resourceId',
             as: 'descriptions',
+        });
+        Resource.Summaries = Resource.hasMany(models.BookingSummary, {
+            foreignKey: 'resourceId',
+            as: 'summaries',
         });
 
   };

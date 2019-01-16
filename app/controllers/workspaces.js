@@ -29,10 +29,10 @@ class workspaceController {
     async users ( req, res) {
         let users,err;
 
-        [err,users] = await to(getCompanyUsers(req.query.companyId));
+        [err,users] = await to(getCompanyUsers(req.company));
 
         if(err) return ReE(res, err, 500);
-        return ReS(res, {message:'Successfully created workspace', users:users}, 201);
+        return ReS(res, {message:'workspace users', users:users}, 201);
     }
 }
 

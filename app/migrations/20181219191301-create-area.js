@@ -2,17 +2,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('areas', {
-        uuid: {
+      id: {
             allowNull: false,
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV1,
-            primaryKey: true
-        },
+            autoIncrement: true,
+            primaryKey: true,
+            type: Sequelize.INTEGER
+      },
       name: {
         type: Sequelize.STRING
       },
-      companyId: {
-        type: Sequelize.INTEGER
+      companyUuid: {
+        type: Sequelize.UUID,
+        references: {
+            model: 'Comapny',
+            key: 'uuid'
+        }
       },
       unitOfMeasure: {
         type: Sequelize.STRING

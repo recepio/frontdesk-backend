@@ -23,21 +23,21 @@ module.exports = {
         return companyJson;
     },
 
-    async addUserByCompanyId (user, companyId) {
-        let err, company;
+    async addUserByCompanyId (user) {
+        let err, companyMember, company;
 
-        [err, company] = await to(Company.findOne({where:{id:companyId}}));
-        if(err) return TE('error finding company');
-        if(!company) TE('cannot add user to company, no company was found with id '+ companyId);
+        [err, companyMember] = await to(CompanyMember.create(user));
+        if(err) TE(err.message);
 
-        company.addUser(user);
-        [err, company] = await to(company.save());
-        if(err) return TE('error adding user to company with id ' + companyId );
+        [err,company] = await to(Company.findByPk(user.companyUuid,{
+            include: [{
+                model: CompanyMember,
+                as: 'users'
+            }]
+        }));
+        if(err) TE(err.message);
 
-        let companyJson = company.toWeb();
-        companyJson.users = [{user:user}];
-
-        return companyJson;
+        return company;
     },
 
     async removeCompany(companyId){
@@ -73,7 +73,7 @@ module.exports = {
         for(let i in companyUsers){
             let companyUser = companyUsers[i];
             let company;
-            [err, company] = await to(companyUser.getCompany({include: [ {association: Company.Users} ] }));
+            [err, company] = await to(companyUser.getCompany());
             if(err) console.log(err.message);
             companiesJson.push(company);
         }
@@ -82,18 +82,12 @@ module.exports = {
         return companiesJson;
     },
 
-    async getCompanyUsers (companyId) {
-        let company, err;
+    async getCompanyUsers (company) {
+        let users, err;
 
-        [err, company] = await to(Company.findById(companyId, {
-            include: [{
-                model: CompanyMember,
-                as: 'users'
-            }],
-        }))
-        if(err) TE('error locating company');
-        if(!company) TE(`company with id ${companyId} not found`);
+        [err, users] = await to(company.getUsers())
+        if(err) TE(err.message);
 
-        return company.toWeb();
+        return users;
     }
 }

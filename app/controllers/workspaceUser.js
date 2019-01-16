@@ -5,7 +5,7 @@ const { getUserCompanies, addUserByCompanyId, removeUser } = require('../service
 class workspaceUserController {
 
     async add(req, res) {
-        let user, companyId, companyUser;
+        let err, user, companyId, companyUser;
         user = req.body;
         companyId = req.query.companyId;
         [err, companyUser] = await to(addUserByCompanyId(user, companyId));

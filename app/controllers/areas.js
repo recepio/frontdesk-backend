@@ -4,25 +4,24 @@ const {to, ReE, ReS} = require('../utils/await-async-sequelize');
 
 class areasController {
 
-    async create (req, res) {
+    async createUpdate (req, res) {
         let err, data, area;
         data = req.body;
 
-        [err, area] = await to(DescriptionService.createArea(data));
+        [err, area] = await to(DescriptionService.createUpdateArea(data));
 
         if(err) return ReE(res, err, 500);
         return ReS(res, {message:'Successfully created area within workspace', area:area}, 201);
     }
 
-    async update (req, res) {
-        let err, data, area, id;
-        data = req.body;
-        id = req.query.id;
+    async fetch (req, res) {
+        let err, data, areas;
+        data = req.company;
 
-        [err, area] = await to(DescriptionService.updateArea(id,data));
+        [err, areas] = await to(DescriptionService.getArea(data));
 
         if(err) return ReE(res, err, 500);
-        return ReS(res, {message:'Successfully updated area within workspace', area:area}, 201);
+        return ReS(res, {message:'areas', areas:areas}, 201);
     }
 
     async remove (req, res) {
@@ -32,7 +31,7 @@ class areasController {
         [err, area] = await to(DescriptionService.removeArea(id));
 
         if(err) return ReE(res, err, 500);
-        return ReS(res, {message:'Successfully updated area within workspace', area:area}, 400);
+        return ReS(res, {message:'Successfully removed area from workspace', area:area}, 400);
     }
 }
 

@@ -14,6 +14,13 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      resourceId  : {
+          type: Sequelize.INTEGER,
+          references: {
+              model: 'Resource',
+              key: 'id'
+          }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

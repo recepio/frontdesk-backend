@@ -8,8 +8,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      resourceId: {
-        type: Sequelize.INTEGER
+      resourceId  : {
+          type: Sequelize.INTEGER,
+          references: {
+              model: 'Resource',
+              key: 'id'
+          }
       },
       basePricePerUse: {
         type: Sequelize.STRING
