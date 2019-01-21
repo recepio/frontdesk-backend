@@ -89,5 +89,14 @@ module.exports = {
         if(err) TE(err.message);
 
         return users;
+    },
+
+    async getCompanyClients (company) {
+        let clients, err;
+
+        [err, clients] = await to(company.getClients())
+        if(err) TE(err.message);
+
+        return clients;
     }
 }

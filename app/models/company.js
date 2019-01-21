@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'companyUuid',
             as: 'users',
         });
+        Company.Clients = Company.hasMany(models.Client, {
+            foreignKey: 'companyUuid',
+            as: 'clients',
+        });
         Company.Areas = Company.hasMany(models.Area, {
             foreignKey: 'companyUuid',
             as: 'areas',

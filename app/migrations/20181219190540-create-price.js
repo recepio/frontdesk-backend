@@ -24,8 +24,11 @@ module.exports = {
       resourceBookingClass: {
         type: Sequelize.STRING
       },
+      name: {
+          type: Sequelize.STRING
+      },
       periodOfUse: {
-        type: Sequelize.TIME
+        type: Sequelize.STRING
       },
       discount: {
         type: Sequelize.DECIMAL

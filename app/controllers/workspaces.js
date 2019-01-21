@@ -1,7 +1,7 @@
 'use strict';
 const {to, ReE, ReS} = require('../utils/await-async-sequelize');
 const DescriptionService  = require('../services/area-resources-price');
-const {createCompany, removeCompany, getCompanyUsers} = require('../services/workspaces');
+const {createCompany, removeCompany, getCompanyUsers, getCompanyClients} = require('../services/workspaces');
 
 
 class workspaceController {
@@ -28,15 +28,18 @@ class workspaceController {
     }
 
     async users ( req, res) {
-        let users,err, areas;
+        let users,err, areas, clients;
 
         [err,users] = await to(getCompanyUsers(req.company));
+
+        if(err) return ReE(res, err, 500);
+        [err,clients] = await to(getCompanyClients(req.company));
 
         if(err) return ReE(res, err, 500);
         [err, areas] = await to(DescriptionService.getArea(req.company));
 
         if(err) return ReE(res, err, 500);
-        return ReS(res, {message:'workspace users', users:users, areas: areas}, 201);
+        return ReS(res, {message:'workspace users', users:users, areas: areas, clients: clients}, 201);
     }
 }
 

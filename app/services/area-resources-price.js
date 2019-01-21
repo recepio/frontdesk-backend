@@ -22,7 +22,16 @@ module.exports.createUpdateArea = createUpdateArea;
 const getArea = async(company) => {
     let err, areas;
 
-    [err, areas] = await to(company.getAreas());
+    [err, areas] = await to(company.getAreas({include: [
+            {
+                association: Area.Resources,
+                include: [
+                    {association: Resource.Descriptions},
+                    {association: Resource.Prices}
+                ]
+            }
+        ]
+    }));
     if(err) TE(err.message);
 
     return areas;
@@ -59,24 +68,21 @@ module.exports.getCompanyAreas = getCompanyAreas;
 
 const createResource = async(data) => {
     let err, resource;
-    [err, resource] = await to(Resource.create(data));
+
+    [err, resource] = await to(Resource.findByPk(data.id));
+
+    if(!resource) {
+        [err, resource] = await to(Resource.create(data));
+        if(err) TE(err.message);
+        return resource;
+    }
+
+    [err, resource] = await to(Resource.update(data));
     if(err) TE(err.message);
 
     return resource;
 };
 module.exports.createResource = createResource;
-
-const updateResource = async(data, id) => {
-    let err, resource, updatedDetail;
-
-    [err, resource] = await to(Resource.findById(id));
-    if(!resource) TE(`Resource with id ${id} not found`);
-
-    resource.set(data);
-    updatedDetail = await to(resource.save());
-    return updatedDetail;
-};
-module.exports.updateResource = updateResource;
 
 const removeResource = async(id) => {
     let err, resource, removedArea;
@@ -98,18 +104,6 @@ const createDescription = async(data) => {
 };
 module.exports.createDescription = createDescription;
 
-const updateDescription = async(data, id) => {
-    let err, description, updatedDescription;
-
-    [err, description] = await to(ResourceDescription.findById(id));
-    if(!description) TE(`Area with id ${id} not found`);
-
-    description.set(data);
-    updatedDescription = await to(area.save());
-    return updatedDescription;
-};
-module.exports.updatedDescription = updateDescription;
-
 const removeDescription = async(id) => {
     let err, description, removedDescription;
 
@@ -123,7 +117,16 @@ module.exports.removeDescription = removeDescription;
 
 const createPrice = async(data) => {
     let err, price;
-    [err, price] = await to(Price.create(data));
+
+    [err, price] = await to(Price.findByPk(data.id));
+
+    if(!price) {
+        [err, price] = await to(Price.create(data));
+        if(err) TE(err.message);
+        return price;
+    }
+
+    [err, price] = await to(price.update(data));
     if(err) TE(err.message);
 
     return price;

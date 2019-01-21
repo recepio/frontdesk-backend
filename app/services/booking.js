@@ -1,5 +1,23 @@
-const { BookingDetail, BookingDetailLocation, ResourceAllocationQueue, BookingSummary } 	    = require('../models');
+const { BookingDetail, BookingDetailLocation, ResourceAllocationQueue, BookingSummary, Client } 	    = require('../models');
 const { to, TE }    = require('../utils/await-async-sequelize');
+
+const createClient = async(data) => {
+    let err, client;
+
+    [err, client] = await to(Client.findByPk(data.id));
+
+    if(!client) {
+        [err, client] = await to(Client.create(data));
+        if(err) TE(err.message);
+        return client;
+    }
+
+    [err, client] = await to(client.update(data));
+    if(err) TE(err.message);
+
+    return client;
+};
+module.exports.createClient = createClient;
 
 const createBookingSummary = async(data) => {
     let err, summary;

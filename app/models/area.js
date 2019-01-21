@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.TEXT
   }, {});
   Area.associate = function(models) {
-      Area.hasMany(models.Resource, {
+      Area.Resources = Area.hasMany(models.Resource, {
           foreignKey: 'areaId',
           as: 'resources',
       });
