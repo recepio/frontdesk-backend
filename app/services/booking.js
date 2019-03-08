@@ -21,7 +21,10 @@ module.exports.createClient = createClient;
 
 const createBookingSummary = async(data) => {
     let err, summary;
-    [err, summary] = await to(BookingSummary.create(data));
+    [err, summary] = await to(BookingSummary.create({
+        companyUuid: data.uuid,
+        companyName: data.name
+    }));
     if(err) TE(err.message);
 
     return summary;
@@ -40,9 +43,28 @@ const updateBookingSummary = async(data, id) => {
 };
 module.exports.updateBookingSummary = updateBookingSummary;
 
-const createBookingDetail = async(data) => {
+const getCompanyBookings = async(company) => {
+    let err, bookings;
+
+    [err, bookings] = await to(company.getBookingSummaries({include: [
+            {
+                association: BookingSummary.Details
+            }
+        ]
+    }));
+    if(err) TE(err.message);
+
+    return bookings;
+};
+module.exports.getCompanyBookings = getCompanyBookings;
+
+
+const createBookingDetail = async(summary,data) => {
     let err, detail;
-    [err, detail] = await to(BookingDetail.create(data));
+    [err, detail] = await to(BookingDetail.create({
+        serviceSummaryId: summary.id,
+        ...data
+    }));
     if(err) TE(err.message);
 
     return detail;

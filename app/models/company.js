@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'companyUuid',
             as: 'areas',
         });
+        Company.BookingSummaries = Company.hasMany(models.BookingSummary, {
+            foreignKey: 'companyUuid',
+            as: 'summaries'
+        })
     };
     Company.prototype.toWeb = function () {
         let json = this.toJSON();

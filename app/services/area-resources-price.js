@@ -1,5 +1,7 @@
-const { Area, Resource, ResourceDescription, BookingSummary, Price } 	    = require('../models');
+const { Area, Resource, ResourceDescription, BookingSummary, Price, BookingDetail } 	    = require('../models');
 const { to, TE }    = require('../utils/await-async-sequelize');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const createUpdateArea = async(data) => {
     let err, area;
@@ -83,6 +85,43 @@ const createResource = async(data) => {
     return resource;
 };
 module.exports.createResource = createResource;
+
+const getFreeResource = async (data) => {
+    let err, resources, bookings, resourceIds;
+    console.log(data);
+    [err, bookings] = await to(BookingDetail.findAll({
+        where: {
+            [Op.and]: [
+                {
+                    dateFrom: {
+                        [Op.lte]: data.dateFrom
+                    },
+                    dateTo: {
+                        [Op.gte]: data.dateFrom
+                    }
+                },
+                {
+                    dateTo: {
+                        [Op.lte]: data.dateTo
+                    }
+                }
+            ]
+        }
+    }));
+    resourceIds = bookings.map(obj=>obj.dataValues.resourceId);
+    [err, resources] = await to(Resource.findAll({
+        where: {
+            id: {
+                [Op.notIn]: resourceIds
+            }
+        }
+    }));
+    if(err) TE(err.message);
+
+    return resources;
+}
+module.exports.getFreeResource = getFreeResource;
+
 
 const removeResource = async(id) => {
     let err, resource, removedArea;

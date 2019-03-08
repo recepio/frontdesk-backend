@@ -2,13 +2,15 @@
 module.exports = (sequelize, DataTypes) => {
   const BookingDetail = sequelize.define('BookingDetail', {
       serviceSummaryId  : DataTypes.INTEGER,
-      dateOfUse : DataTypes.DATE,
-      timeFRom  : DataTypes.TIME,
+      dateFrom : DataTypes.DATE,
+      dateTo : DataTypes.DATE,
+      timeFrom  : DataTypes.TIME,
       timeTo  : DataTypes.TIME,
       resourceBookingClass  : DataTypes.STRING,
       costOfService : DataTypes.DECIMAL,
       userId  : DataTypes.INTEGER,
-      resourceUuid  : DataTypes.UUID,
+      userEmail : DataTypes.STRING,
+      resourceId  : DataTypes.INTEGER,
       resourceName : DataTypes.STRING,
       StartingLocation  : DataTypes.STRING
   }, {
@@ -23,3 +25,4 @@ module.exports = (sequelize, DataTypes) => {
 
   return BookingDetail;
 };
+

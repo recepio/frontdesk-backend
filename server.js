@@ -9,6 +9,7 @@ const app = express();
 const users    = require('./app/routes/users');
 const workspace = require('./app/routes/workspaces');
 const description = require('./app/routes/workspace-description');
+const booking = require('./app/routes/bookings');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,6 +31,7 @@ app.use(cors());
 app.use('/v1/auth', users);
 app.use('/v1/workspace', workspace);
 app.use('/v1/description', description);
+app.use('/v1/booking', booking);
 
 app.get('*', (req, res) => res.status(200).send({
     message: 'frontdesk backend',
