@@ -31,7 +31,7 @@ class bookingsController {
         [err, bookings] = await to(BookingService.getCompanyBookings(req.company));
 
         if(err) return ReE(res, err, 500);
-        return ReS(res, {message:'areas', areas:areas}, 201);
+        return ReS(res, {message:'areas', booking:bookings}, 201);
     }
 
     async fetchFreeResources(req, res) {

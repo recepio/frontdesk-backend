@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     BookingSummary.associate = function(models) {
         BookingSummary.Details = BookingSummary.hasMany(models.BookingDetail, {
             foreignKey: 'serviceSummaryId',
-            as: 'bookingDetails',
+            as: 'details',
         });
     };
     return BookingSummary;

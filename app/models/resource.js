@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'resourceId',
             as: 'prices',
         });
-        Resource.Summaries = Resource.hasMany(models.BookingSummary, {
+        Resource.Details = Resource.hasMany(models.BookingDetail, {
             foreignKey: 'resourceId',
-            as: 'summaries',
+            as: 'details',
         });
 
   };

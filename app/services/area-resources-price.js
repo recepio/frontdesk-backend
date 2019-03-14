@@ -29,7 +29,8 @@ const getArea = async(company) => {
                 association: Area.Resources,
                 include: [
                     {association: Resource.Descriptions},
-                    {association: Resource.Prices}
+                    {association: Resource.Prices},
+                    {association: Resource.Details}
                 ]
             }
         ]
@@ -94,7 +95,7 @@ const getFreeResource = async (data) => {
             [Op.and]: [
                 {
                     dateFrom: {
-                        [Op.lte]: data.dateFrom
+                        [Op.gte]: data.dateFrom
                     },
                     dateTo: {
                         [Op.gte]: data.dateFrom

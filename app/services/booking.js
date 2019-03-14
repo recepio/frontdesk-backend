@@ -45,8 +45,7 @@ module.exports.updateBookingSummary = updateBookingSummary;
 
 const getCompanyBookings = async(company) => {
     let err, bookings;
-
-    [err, bookings] = await to(company.getBookingSummaries({include: [
+    [err, bookings] = await to(company.getSummaries({include: [
             {
                 association: BookingSummary.Details
             }
