@@ -25,6 +25,14 @@ class bookingsController {
         return ReS(res, {message:'Sucessfully registered client', detail:detail}, 201);
     }
 
+    async updateBooking(req, res){
+        let err, data, detail;
+        data = req.body;
+        [err, detail] = await to(BookingService.updateBookingDetail(data, data.id));
+        if(err) return ReE(res, err, 500);
+        return ReS(res, {message:'Sucessfully updated client', detail:detail}, 201);
+    }
+
     async fetchBookings(req, res) {
         let err, bookings;
 
@@ -42,6 +50,16 @@ class bookingsController {
 
         if(err) return ReE(res, err, 500);
         return ReS(res, {message:'resources', resources:areas}, 201);
+    }
+
+    async fetchBookings(req, res) {
+        let err, data, bookings;
+        data = req.company;
+
+        [err, bookings] = await to(BookingService.fetchCompanyEvents(data));
+
+        if(err) return ReE(res, err, 500);
+        return ReS(res, {message:'bookings', bookings:bookings}, 201);
     }
 }
 

@@ -18,6 +18,15 @@ module.exports = {
               key: 'id'
           }
       },
+      startFrom : {
+          type: Sequelize.DATE
+      },
+      end : {
+          type: Sequelize.DATE
+      },
+      status: {
+          type: Sequelize.STRING
+      },
       dateOfUse : {
           type: Sequelize.DATE
       },

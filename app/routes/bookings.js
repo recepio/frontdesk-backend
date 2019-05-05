@@ -11,7 +11,9 @@ require('../middlewares/passport')(passport);
 
 router.post('', passport.authenticate('jwt', {session:false}), workspace.workspace, bookingController.createBooking );
 router.get('/', passport.authenticate('jwt', {session:false}), workspace.workspace, bookingController.fetchBookings );
+router.get('/bookings', passport.authenticate('jwt', {session:false}), workspace.workspace, bookingController.fetchBookings );
 router.post('/search', passport.authenticate('jwt', {session:false}), workspace.workspace, bookingController.fetchFreeResources );
+router.post('/update', passport.authenticate('jwt', {session:false}), workspace.workspace, bookingController.updateBooking );
 
 
 

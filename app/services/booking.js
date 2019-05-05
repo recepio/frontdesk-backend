@@ -123,3 +123,22 @@ const updateResourceAllocationQueue = async() => {
     return updatedQueue;
 };
 module.exports.updateResourceAllocationQueue = updateResourceAllocationQueue;
+
+const fetchCompanyEvents = async(company) => {
+    let err, events;
+    [err, events] = await to(company.getSummaries({
+        order: ['updatedAt'],
+        include: [
+            {
+                association: BookingSummary.Details,
+            }
+        ]
+    }));
+    if (err) TE(err.message);
+
+    return events
+ };
+module.exports.fetchCompanyEvents = fetchCompanyEvents;
+
+
+
